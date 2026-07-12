@@ -1,0 +1,2 @@
+.logo>div{display:grid}.logo small{margin-top:1px;color:#9a978e;font:600 8px 'DM Sans',sans-serif;letter-spacing:.65px;text-transform:uppercase}
+@media(max-width:1000px){.logo>div{display:none}}
