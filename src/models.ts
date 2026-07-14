@@ -11,3 +11,12 @@ export interface Post {
   liked?: boolean
   bookmarked?: boolean
 }
+
+export interface Notification {
+  id: number
+  person: string
+  message: string
+  time: string
+  type: 'like' | 'follow' | 'share' | 'reply'
+  read: boolean
+}
