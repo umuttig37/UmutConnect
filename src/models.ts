@@ -20,3 +20,20 @@ export interface Notification {
   type: 'like' | 'follow' | 'share' | 'reply'
   read: boolean
 }
+
+export interface ChatMessage {
+  id: number
+  sender: 'me' | 'them'
+  text: string
+  sentAt: string
+}
+
+export interface Conversation {
+  id: string
+  name: string
+  handle: string
+  initials: string
+  color: string
+  unread: number
+  messages: ChatMessage[]
+}

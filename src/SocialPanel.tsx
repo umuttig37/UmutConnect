@@ -1,12 +1,7 @@
 import { useState } from 'react'
-import { ArrowLeft, Bell, CheckCheck, Heart, Mail, MessageCircle, Repeat2, Search, Send, UserPlus, X } from 'lucide-react'
-import type { Notification } from './models'
-
-const conversations = [
-  ['EL', 'Emilia Laine', 'That layout feels much clearer now.', '2m', '#f6b65a'],
-  ['ON', 'Oskari Niemi', 'Want to compare notes tomorrow?', '1h', '#74c8bb'],
-  ['SK', 'Sara Karjalainen', 'Sent you a post', '5h', '#e88da3'],
-]
+import { ArrowLeft, Bell, CheckCheck, Heart, MessageCircle, Repeat2, Search, UserPlus, X } from 'lucide-react'
+import { MessageCenter } from './MessageCenter'
+import type { Conversation, Notification } from './models'
 
 interface SocialPanelProps {
   view: string
@@ -15,9 +10,13 @@ interface SocialPanelProps {
   onRead: (id: number) => void
   onReadAll: () => void
   onDismiss: (id: number) => void
+  conversations: Conversation[]
+  activeConversationId: string
+  onOpenConversation: (id: string) => void
+  onSendMessage: (conversationId: string, text: string) => void
 }
 
-export function SocialPanel({ view, onClose, notifications, onRead, onReadAll, onDismiss }: SocialPanelProps) {
+export function SocialPanel({ view, onClose, notifications, onRead, onReadAll, onDismiss, conversations, activeConversationId, onOpenConversation, onSendMessage }: SocialPanelProps) {
   const [notificationFilter, setNotificationFilter] = useState<'all' | 'unread'>('all')
   const shownNotifications = notificationFilter === 'unread' ? notifications.filter(item => !item.read) : notifications
 
@@ -32,7 +31,7 @@ export function SocialPanel({ view, onClose, notifications, onRead, onReadAll, o
       <div className="notification-list">{shownNotifications.map(item => <article className={item.read ? 'read' : ''} key={item.id} onClick={() => onRead(item.id)}><span className={`notification-icon ${item.type}`}>{notificationIcon(item.type)}</span><div><strong>{item.person}</strong> {item.message}<small>{item.time}</small></div>{!item.read && <i aria-label="Unread" />}<button onClick={event => { event.stopPropagation(); onDismiss(item.id) }} aria-label={`Dismiss notification from ${item.person}`}><X size={15} /></button></article>)}</div>
     </div>}
 
-    {view === 'Messages' && <div className="message-layout"><div className="conversation-list">{conversations.map((person, index) => <button className={index === 0 ? 'active' : ''} key={person[1]}><span className="avatar" style={{ background: person[4] }}>{person[0]}</span><div><strong>{person[1]}</strong><span>{person[2]}</span></div><small>{person[3]}</small></button>)}</div><div className="chat-preview"><Mail size={28} /><strong>Your conversations live here</strong><p>Pick a person to continue where you left off.</p><label><input placeholder="Write a message" /><button><Send size={16} /></button></label></div></div>}
+    {view === 'Messages' && <MessageCenter conversations={conversations} activeId={activeConversationId} onOpen={onOpenConversation} onSend={onSendMessage} />}
 
     {view === 'Profile' && <div className="profile-view"><div className="profile-cover"><span>Helsinki evenings</span></div><div className="profile-details"><span className="profile-avatar">UE</span><button>Edit profile</button><h2>Umut Efe Uygur</h2><span>@umutefe</span><p>Junior software developer building practical web products and learning something new with every project. Based in Helsinki.</p><small>Joined July 2026</small><div className="profile-stats"><span><strong>86</strong> Following</span><span><strong>214</strong> Followers</span><span><strong>19</strong> Posts</span></div></div><nav className="profile-tabs"><button className="active">Posts</button><button>Replies</button><button>Media</button></nav><article className="profile-post"><strong>Umut Efe Uygur</strong><span>@umutefe · now</span><p>Putting the next version of UmutConnect together today. Making every part feel useful, not just clickable.</p></article></div>}
 
