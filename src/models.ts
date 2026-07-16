@@ -37,3 +37,21 @@ export interface Conversation {
   unread: number
   messages: ChatMessage[]
 }
+
+export interface Person {
+  id: string
+  name: string
+  handle: string
+  initials: string
+  color: string
+  role: string
+  location: string
+}
+
+export interface Topic {
+  id: string
+  name: string
+  category: string
+  posts: string
+  description: string
+}

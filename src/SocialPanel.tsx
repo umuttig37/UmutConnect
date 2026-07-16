@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { ArrowLeft, Bell, CheckCheck, Heart, MessageCircle, Repeat2, Search, UserPlus, X } from 'lucide-react'
+import { ArrowLeft, Bell, CheckCheck, Heart, MessageCircle, Repeat2, UserPlus, X } from 'lucide-react'
 import { MessageCenter } from './MessageCenter'
-import type { Conversation, Notification } from './models'
+import { ExplorePanel } from './ExplorePanel'
+import type { Conversation, Notification, Post } from './models'
 
 interface SocialPanelProps {
   view: string
@@ -14,16 +15,20 @@ interface SocialPanelProps {
   activeConversationId: string
   onOpenConversation: (id: string) => void
   onSendMessage: (conversationId: string, text: string) => void
+  posts: Post[]
+  following: string[]
+  onFollow: (handle: string) => void
+  onOpenPost: (post: Post) => void
 }
 
-export function SocialPanel({ view, onClose, notifications, onRead, onReadAll, onDismiss, conversations, activeConversationId, onOpenConversation, onSendMessage }: SocialPanelProps) {
+export function SocialPanel({ view, onClose, notifications, onRead, onReadAll, onDismiss, conversations, activeConversationId, onOpenConversation, onSendMessage, posts, following, onFollow, onOpenPost }: SocialPanelProps) {
   const [notificationFilter, setNotificationFilter] = useState<'all' | 'unread'>('all')
   const shownNotifications = notificationFilter === 'unread' ? notifications.filter(item => !item.read) : notifications
 
   return <section className="social-panel" aria-label={view}>
     <header><button onClick={onClose} aria-label="Back to home"><ArrowLeft size={19} /></button><div><h1>{view}</h1><span>{view === 'Messages' ? 'Your conversations' : 'What’s happening around you'}</span></div></header>
 
-    {view === 'Explore' && <><label className="panel-search"><Search /><input autoFocus placeholder="Search people, posts and topics" /></label><div className="topic-grid">{['Design that lasts', 'Indie development', 'Life in Helsinki', 'Open source', 'Product thinking', 'Weekend projects'].map((topic, index) => <button key={topic}><small>0{index + 1}</small><strong>{topic}</strong><span>{5 + index * 3}.2K conversations</span></button>)}</div></>}
+    {view === 'Explore' && <ExplorePanel posts={posts} following={following} onFollow={onFollow} onOpenPost={onOpenPost} />}
 
     {view === 'Notifications' && <div className="notifications-view">
       <div className="notification-toolbar"><div><button className={notificationFilter === 'all' ? 'active' : ''} onClick={() => setNotificationFilter('all')}>All</button><button className={notificationFilter === 'unread' ? 'active' : ''} onClick={() => setNotificationFilter('unread')}>Unread</button></div><button onClick={onReadAll} disabled={!notifications.some(item => !item.read)}><CheckCheck size={15} /> Mark all read</button></div>
