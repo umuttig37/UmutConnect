@@ -8,6 +8,8 @@ export interface Post {
   likes: number
   replies: number
   photo?: boolean
+  image?: string
+  imageAlt?: string
   liked?: boolean
   bookmarked?: boolean
 }
