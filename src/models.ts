@@ -12,6 +12,7 @@ export interface Post {
   imageAlt?: string
   liked?: boolean
   bookmarked?: boolean
+  pinned?: boolean
 }
 
 export interface Notification {
