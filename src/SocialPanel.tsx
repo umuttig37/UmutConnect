@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ArrowLeft, Bell, CheckCheck, Heart, MessageCircle, Repeat2, UserPlus, X } from 'lucide-react'
 import { MessageCenter } from './MessageCenter'
 import { ExplorePanel } from './ExplorePanel'
+import { BookmarksPanel } from './BookmarksPanel'
 import type { Conversation, Notification, Post } from './models'
 
 interface SocialPanelProps {
@@ -19,9 +20,10 @@ interface SocialPanelProps {
   following: string[]
   onFollow: (handle: string) => void
   onOpenPost: (post: Post) => void
+  onRemoveBookmark: (post: Post) => void
 }
 
-export function SocialPanel({ view, onClose, notifications, onRead, onReadAll, onDismiss, conversations, activeConversationId, onOpenConversation, onSendMessage, posts, following, onFollow, onOpenPost }: SocialPanelProps) {
+export function SocialPanel({ view, onClose, notifications, onRead, onReadAll, onDismiss, conversations, activeConversationId, onOpenConversation, onSendMessage, posts, following, onFollow, onOpenPost, onRemoveBookmark }: SocialPanelProps) {
   const [notificationFilter, setNotificationFilter] = useState<'all' | 'unread'>('all')
   const shownNotifications = notificationFilter === 'unread' ? notifications.filter(item => !item.read) : notifications
 
@@ -38,9 +40,11 @@ export function SocialPanel({ view, onClose, notifications, onRead, onReadAll, o
 
     {view === 'Messages' && <MessageCenter conversations={conversations} activeId={activeConversationId} onOpen={onOpenConversation} onSend={onSendMessage} />}
 
+    {view === 'Bookmarks' && <BookmarksPanel posts={posts.filter(post => post.bookmarked)} onOpenPost={onOpenPost} onRemove={onRemoveBookmark} />}
+
     {view === 'Profile' && <div className="profile-view"><div className="profile-cover"><span>Helsinki evenings</span></div><div className="profile-details"><span className="profile-avatar">UE</span><button>Edit profile</button><h2>Umut Efe Uygur</h2><span>@umutefe</span><p>Junior software developer building practical web products and learning something new with every project. Based in Helsinki.</p><small>Joined July 2026</small><div className="profile-stats"><span><strong>86</strong> Following</span><span><strong>214</strong> Followers</span><span><strong>19</strong> Posts</span></div></div><nav className="profile-tabs"><button className="active">Posts</button><button>Replies</button><button>Media</button></nav><article className="profile-post"><strong>Umut Efe Uygur</strong><span>@umutefe · now</span><p>Putting the next version of UmutConnect together today. Making every part feel useful, not just clickable.</p></article></div>}
 
-    {!['Explore', 'Notifications', 'Messages', 'Profile'].includes(view) && <div className="quiet-state"><strong>{view} is ready for your account.</strong><p>This part will grow naturally as UmutConnect gets its own backend.</p></div>}
+    {!['Explore', 'Notifications', 'Messages', 'Bookmarks', 'Profile'].includes(view) && <div className="quiet-state"><strong>{view} is ready for your account.</strong><p>This part will grow naturally as UmutConnect gets its own backend.</p></div>}
   </section>
 }
 
