@@ -58,3 +58,33 @@ export interface Topic {
   posts: string
   description: string
 }
+
+export interface Reply {
+  id: number
+  postId: number
+  name: string
+  handle: string
+  initials: string
+  color: string
+  text: string
+  time: string
+  liked: boolean
+  likes: number
+}
+
+export interface UserProfile {
+  name: string
+  handle: string
+  bio: string
+  location: string
+  color: string
+}
+
+export interface Preferences {
+  theme: 'light' | 'dark' | 'system'
+  likes: boolean
+  follows: boolean
+  replies: boolean
+  messages: boolean
+  compactFeed: boolean
+}

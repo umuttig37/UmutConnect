@@ -56,7 +56,7 @@ export function PostComposer({ onPublish, onNotice }: PostComposerProps) {
       <textarea aria-label="Create a post" placeholder="Share something with your people…" value={text} maxLength={280} onChange={event => setText(event.target.value)} />
       {image && <div className="composer-image"><img src={image} alt={imageAlt || 'Selected upload preview'} /><button onClick={removeImage} aria-label="Remove selected image"><X size={17} /></button><label>Image description<input value={imageAlt} onChange={event => setImageAlt(event.target.value)} maxLength={120} placeholder="Describe the image for people who cannot see it" /></label></div>}
       <footer>
-        <div className="composer-tools"><input ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={event => chooseImage(event.target.files?.[0])} /><button onClick={() => fileInput.current?.click()} disabled={processingImage}><ImagePlus size={15} /> {processingImage ? 'Preparing…' : image ? 'Change photo' : 'Photo'}</button><button onClick={() => onNotice('Polls will arrive in a later update.')}>Poll</button></div>
+        <div className="composer-tools"><input ref={fileInput} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={event => chooseImage(event.target.files?.[0])} /><button onClick={() => fileInput.current?.click()} disabled={processingImage}><ImagePlus size={15} /> {processingImage ? 'Preparing…' : image ? 'Change photo' : 'Photo'}</button></div>
         <span className="character-count">{text.length}/280</span>
         <button className="small-invade" disabled={(!text.trim() && !image) || processingImage} onClick={publish}>Post</button>
       </footer>
